@@ -49,6 +49,7 @@ getUserMedia({'video': true},
   }
 );
 
+
   window.onload = function() {
     byId('loading').style.display = 'none';
     document.body.appendChild(video);
@@ -126,15 +127,33 @@ getUserMedia({'video': true},
 
       var t = new Date();
       var detected = detector.detectMarkerLite(raster, threshold);
+	  // Read image here: BY JASON
+		if (detected != 0) {
+			for(var m=0; m < data.sensors.length; m++) {
+				if (data.sensors[m].type == "accelerometer") {
+					if (data.sensors[m].values[0] > 0 && data.sensors[m].values[0] < 10) {
+						for(var i=0; i<3000; i++) {
+							//document.write("<center>Right time to a call</center>");
+							if (i == 2999) {
+								alert("Well done!");
+							}
+						}	
+					}
+					else {
+						alert("Try Again!");
+					}
+				}
+			}
+		}
       for (var idx = 0; idx<detected; idx++) {
         var id = detector.getIdMarkerData(idx);
-        //read data from i_code via Marsial--MarshalçµŒç”±ã§èª­ã¿å‡ºã™
+        //read data from i_code via Marsial--MarshalÃ§ÂµÅ’Ã§â€Â±Ã£ÂÂ§Ã¨ÂªÂ­Ã£ÂÂ¿Ã¥â€¡ÂºÃ£Ââ„¢
         var currId;
         if (id.packetLength > 4) {
           currId = -1;
         }else{
           currId=0;
-          //æœ€å¤§4ãƒã‚¤ãƒˆç¹‹ã’ã¦ï¼‘å€‹ã®intå€¤ã«å¤‰æ›
+          //Ã¦Å“â‚¬Ã¥Â¤Â§4Ã£Æ’ÂÃ£â€šÂ¤Ã£Æ’Ë†Ã§Â¹â€¹Ã£Ââ€™Ã£ÂÂ¦Ã¯Â¼â€˜Ã¥â‚¬â€¹Ã£ÂÂ®intÃ¥â‚¬Â¤Ã£ÂÂ«Ã¥Â¤â€°Ã¦Ââ€º
           for (var i = 0; i < id.packetLength; i++ ) {
             currId = (currId << 8) | id.getPacketData(i);
             //console.log("id[", i, "]=", id.getPacketData(i));
@@ -245,6 +264,7 @@ getUserMedia({'video': true},
 </head>
 <body>
 <div style="display: none;" id="loading">Hang on, I'm loading stuff...</div>
+
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -260,32 +280,14 @@ getUserMedia({'video': true},
 //i add in de
 		ipaddress=prompt("input your IP") 
 		var data = JSON.parse(httpGet("http://"+ipaddress));
-		
+
 		function httpGet(theUrl) { 
-			var xmlHttp = null; 
-			xmlHttp = new XMLHttpRequest(); 
-			xmlHttp.open( "GET", theUrl, false ); 
-			xmlHttp.send( null ); 
-			return xmlHttp.responseText; }
-			//Using accelerometer sensor
-		if (marker != null) {
-			for(var m=0;m<data.sensors.length; m++)
-			{
-				document.write(data.sensors[m].		values[0]);
-				if (data.sensors[m].type == "accelerometer" && data.sensors[m].		values[0]>8.5 && data.sensors[m].type == "accelerometer" && data.sensors[m].values[0]<10)
-				{
-					for(var i=0; i<10; i++) {
-						//document.write("<center>Right time to a call</center>");
-						document.write("Well done!");
-					}
-				}
-				else
-				{
-					document.write("Try Again!");
-				}
-			}
+			var xmlHttp = null;
+			xmlHttp = new XMLHttpRequest();
+			xmlHttp.open( "GET", theUrl, false );
+			xmlHttp.send(null);
+			return xmlHttp.responseText;
 		}
-		</script>
+</script>
 
 
-<video src="mediastream:4fa6f7d4-a01f-254a-9465-394116e9f063" controls style="display: none;" autoplay loop height="480" width="640"></video><canvas height="720" width="960"></canvas></body></html>
