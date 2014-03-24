@@ -5,6 +5,7 @@
 <script src="AR_mediaStream_files/utils.js"></script>
 <script src="AR_mediaStream_files/photos.js"></script>
 <script>
+
   threshold = 128;
   DEBUG = false;
 
@@ -127,33 +128,45 @@ getUserMedia({'video': true},
 
       var t = new Date();
       var detected = detector.detectMarkerLite(raster, threshold);
+	  
 	  // Read image here: BY JASON
 		if (detected != 0) {
-			for(var m=0; m < data.sensors.length; m++) {
-				if (data.sensors[m].type == "accelerometer") {
-					if (data.sensors[m].values[0] > 0 && data.sensors[m].values[0] < 10) {
-						for(var i=0; i<3000; i++) {
-							//document.write("<center>Right time to a call</center>");
-							if (i == 2999) {
+			
+			var counter=0;
+			while (counter<3000) {
+				
+				for(var m=0; m < data.sensors.length; m++) {
+					if (data.sensors[m].type == "accelerometer") {
+					
+						console.log("sensor value = " + data.sensors[m].values[0]);
+						console.log("counter: " + counter);
+						if (data.sensors[m].values[0] > -10 && data.sensors[m].values[0] < 10)         {
+							
+							counter ++;
+							if (counter == 2999) {
+								
 								alert("Well done!");
 							}
-						}	
+						}
+						else {
+							counter=0;
+							//alert("Try Again!");
+							break;
+						}
 					}
-					else {
-						alert("Try Again!");
-					}
+
 				}
 			}
 		}
       for (var idx = 0; idx<detected; idx++) {
         var id = detector.getIdMarkerData(idx);
-        //read data from i_code via Marsial--MarshalÃ§ÂµÅ’Ã§â€Â±Ã£ÂÂ§Ã¨ÂªÂ­Ã£ÂÂ¿Ã¥â€¡ÂºÃ£Ââ„¢
+        //read data from i_code via Marsial--MarshalÃƒÂ§Ã‚ÂµÃ…â€™ÃƒÂ§Ã¢â‚¬ÂÃ‚Â±ÃƒÂ£Ã‚ÂÃ‚Â§ÃƒÂ¨Ã‚ÂªÃ‚Â­ÃƒÂ£Ã‚ÂÃ‚Â¿ÃƒÂ¥Ã¢â‚¬Â¡Ã‚ÂºÃƒÂ£Ã‚ÂÃ¢â€žÂ¢
         var currId;
         if (id.packetLength > 4) {
           currId = -1;
         }else{
           currId=0;
-          //Ã¦Å“â‚¬Ã¥Â¤Â§4Ã£Æ’ÂÃ£â€šÂ¤Ã£Æ’Ë†Ã§Â¹â€¹Ã£Ââ€™Ã£ÂÂ¦Ã¯Â¼â€˜Ã¥â‚¬â€¹Ã£ÂÂ®intÃ¥â‚¬Â¤Ã£ÂÂ«Ã¥Â¤â€°Ã¦Ââ€º
+          //ÃƒÂ¦Ã…â€œÃ¢â€šÂ¬ÃƒÂ¥Ã‚Â¤Ã‚Â§4ÃƒÂ£Ã†â€™Ã‚ÂÃƒÂ£Ã¢â‚¬Å¡Ã‚Â¤ÃƒÂ£Ã†â€™Ã‹â€ ÃƒÂ§Ã‚Â¹Ã¢â‚¬Â¹ÃƒÂ£Ã‚ÂÃ¢â‚¬â„¢ÃƒÂ£Ã‚ÂÃ‚Â¦ÃƒÂ¯Ã‚Â¼Ã¢â‚¬ËœÃƒÂ¥Ã¢â€šÂ¬Ã¢â‚¬Â¹ÃƒÂ£Ã‚ÂÃ‚Â®intÃƒÂ¥Ã¢â€šÂ¬Ã‚Â¤ÃƒÂ£Ã‚ÂÃ‚Â«ÃƒÂ¥Ã‚Â¤Ã¢â‚¬Â°ÃƒÂ¦Ã‚ÂÃ¢â‚¬Âº
           for (var i = 0; i < id.packetLength; i++ ) {
             currId = (currId << 8) | id.getPacketData(i);
             //console.log("id[", i, "]=", id.getPacketData(i));
