@@ -78,26 +78,36 @@ function connect()
 			*/
 	    	
         }
-    	setInterval(test,5000);
+    	setInterval(test,50);
 	}
 	
 }
 
+	
 function test() {
+	var marker = detected;
+
 	var sensors = JSON.parse(httpGet(DATA_URL)).sensors;
 	var ans = "yes";
-	for (var key in sensors) {
-		if (sensors[key].type == "accelerometer") {
-			for (var count = 0; count < 3000; count++) {				
-				if (sensors[key].values[0] < 0) {
-					ans = "no";
+	if (marker != 0) {
+		for (var key in sensors) {
+			if (sensors[key].type == "accelerometer") {
+				for (var count = 0; count < 3000; count++) {
+					if (count == 0) alert("3 seconds");
+					if (count == 999) alert("2 seconds");
+					if (count == 1999) alert("1 seconds");
+					
+														
+					if (sensors[key].values[0] < 0) {
+						ans = "no";
+					}
 				}
-			}
-			if (ans == "yes") {
-				alert("Well Done!!!");
-			}
-			else {
-				alert("NOOB!!!");
+				if (ans == "yes") {
+					alert("Well Done!!!");
+				}
+				else {
+					alert("NOOB!!!");
+				}
 			}
 		}
 	}
