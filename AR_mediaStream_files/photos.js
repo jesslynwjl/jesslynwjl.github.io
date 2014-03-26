@@ -1,3 +1,6 @@
 Photos = [
-"2362652089_baaa1958d0_z.jpg"
+"board1.jpg",
+"board2.png",
+"board3.jpg",
+"board4.jpg"
 ];
