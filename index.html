@@ -78,8 +78,8 @@ getUserMedia({'video': true},
 
     var glCanvas = document.createElement('canvas');
     glCanvas.style.webkitTransform = 'scale(-1.0, 1.0)';
-    glCanvas.width = 672;
-    glCanvas.height = 504;
+    glCanvas.width = 624;
+    glCanvas.height = 468;
     var s = glCanvas.style;
     document.body.appendChild(glCanvas);
     display = new Magi.Scene(glCanvas);
@@ -178,13 +178,13 @@ getUserMedia({'video': true},
 		}*/
       for (var idx = 0; idx<detected; idx++) {
         var id = detector.getIdMarkerData(idx);
-        //read data from i_code via Marsial--MarshalÃ§ÂµÅ’Ã§â€Â±Ã£ÂÂ§Ã¨ÂªÂ­Ã£ÂÂ¿Ã¥â€¡ÂºÃ£Ââ„¢
+        //read data from i_code via Marsial--MarshalÃƒÂ§Ã‚ÂµÃ…â€™ÃƒÂ§Ã¢â‚¬ÂÃ‚Â±ÃƒÂ£Ã‚ÂÃ‚Â§ÃƒÂ¨Ã‚ÂªÃ‚Â­ÃƒÂ£Ã‚ÂÃ‚Â¿ÃƒÂ¥Ã¢â‚¬Â¡Ã‚ÂºÃƒÂ£Ã‚ÂÃ¢â€žÂ¢
         var currId;
         if (id.packetLength > 4) {
           currId = -1;
         }else{
           currId=0;
-          //Ã¦Å“â‚¬Ã¥Â¤Â§4Ã£Æ’ÂÃ£â€šÂ¤Ã£Æ’Ë†Ã§Â¹â€¹Ã£Ââ€™Ã£ÂÂ¦Ã¯Â¼â€˜Ã¥â‚¬â€¹Ã£ÂÂ®intÃ¥â‚¬Â¤Ã£ÂÂ«Ã¥Â¤â€°Ã¦Ââ€º
+          //ÃƒÂ¦Ã…â€œÃ¢â€šÂ¬ÃƒÂ¥Ã‚Â¤Ã‚Â§4ÃƒÂ£Ã†â€™Ã‚ÂÃƒÂ£Ã¢â‚¬Å¡Ã‚Â¤ÃƒÂ£Ã†â€™Ã‹â€ ÃƒÂ§Ã‚Â¹Ã¢â‚¬Â¹ÃƒÂ£Ã‚ÂÃ¢â‚¬â„¢ÃƒÂ£Ã‚ÂÃ‚Â¦ÃƒÂ¯Ã‚Â¼Ã¢â‚¬ËœÃƒÂ¥Ã¢â€šÂ¬Ã¢â‚¬Â¹ÃƒÂ£Ã‚ÂÃ‚Â®intÃƒÂ¥Ã¢â€šÂ¬Ã‚Â¤ÃƒÂ£Ã‚ÂÃ‚Â«ÃƒÂ¥Ã‚Â¤Ã¢â‚¬Â°ÃƒÂ¦Ã‚ÂÃ¢â‚¬Âº
           for (var i = 0; i < id.packetLength; i++ ) {
             currId = (currId << 8) | id.getPacketData(i);
             //console.log("id[", i, "]=", id.getPacketData(i));
@@ -290,6 +290,13 @@ getUserMedia({'video': true},
     font-weight: bold;
     font-family: Times;
   }
+#count {
+	font-size: large;
+	font-weight: bold;
+	font-variant: normal;
+	color: #F00;
+	text-decoration: blink;
+}
 </style>
 
 </head>
@@ -298,15 +305,16 @@ getUserMedia({'video': true},
 <!--<span id="timer"></span>-->
 
 <div id="settings">
-        <div id="connection">
+  <div id="connection">
             Sensor IP Address : <input type="text" id="input_ip_address" value="http://172.23.45.30:8765/"/>
-            <button type="button" id="button_connect" onclick="connect()">Connect</button>
+            <button type="button" id="button_connect" onClick="connect()">Connect</button>
         </div>
+        <span id="count">Enter IP address above</span>
         <div id="sensorlist">
             <!--<select id="data_type"></select>-->
             <!--<button type="button" id="button_add" onclick="addGraph()" disabled="true">Add</button>-->
         </div>
-    </div>
+</div>
     <div id="graphview">
     </div>
 
