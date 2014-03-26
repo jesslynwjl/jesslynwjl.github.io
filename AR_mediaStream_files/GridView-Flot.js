@@ -1,3 +1,5 @@
+var countdown=6;
+
 var DATA_POINT_NUMBER = 20;
 var UPDATE_INTERVAL = 50;
 var DATA_URL = "";
@@ -78,38 +80,63 @@ function connect()
 			*/
 	    	
         }
-    	setInterval(test,50);
+		
+    	setInterval(test,1000);
 	}
 	
 }
 
-	
+var i =0;
 function test() {
+	// ask user to find target
+	if(countdown==6) {
+		document.getElementById("count").innerHTML = "Find your target!";
+	}
+	// give them 3 seconds to pull the bow
+	else if(countdown >3) {
+		document.getElementById("count").innerHTML = "Pull the string and hold for 3 seconds";
+	}
+	
+	console.log("countdown: " + countdown);
 	var marker = detected;
 
 	var sensors = JSON.parse(httpGet(DATA_URL)).sensors;
 	var ans = "yes";
+	
+	// if target found, give user 2 seconds to pull bow
 	if (marker != 0) {
+		
+		if(countdown <=3) {
+			document.getElementById("count").innerHTML = countdown + "s"
+		}
+
 		for (var key in sensors) {
 			if (sensors[key].type == "accelerometer") {
-				for (var count = 0; count < 3000; count++) {
-					if (count == 0) alert("3 seconds");
-					if (count == 999) alert("2 seconds");
-					if (count == 1999) alert("1 seconds");
-					
-														
-					if (sensors[key].values[0] < 0) {
-						ans = "no";
+				console.log("sensor value: " + sensors[key].values[0]);
+				if (sensors[key].values[0] < 8.5 || sensors[key].values[0] > 10)
+				{
+					countdown=6;
+					ans = "no";
+				}
+				
+				if (ans == "yes") {
+					if(countdown==0) {
+						countdown=6;
+						alert("Well Done!!!");
+					}
+					else {
+						countdown --;
 					}
 				}
-				if (ans == "yes") {
-					alert("Well Done!!!");
-				}
 				else {
+					countdown=6;
 					alert("NOOB!!!");
 				}
 			}
 		}
+	}
+	else {
+		countdown=6;
 	}
 }
 
