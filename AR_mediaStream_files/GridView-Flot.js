@@ -55,7 +55,7 @@ function connect()
     if(sensorJSON != null){
         document.getElementById("button_connect").disabled = true;
 
-        // Get the dropdown list to be filled.
+        // Get the dropdow`n list to be filled.
         var dropdownList = document.getElementById("data_type");
 
         // Find all sensors and the axis to each sensor.
@@ -63,7 +63,9 @@ function connect()
             availableSensors.push(sensorJSON[key].type);
             // We don't handle wifi yet, so we exlude this from the list.
             // The rest of the sensors are added to the dropdown list.
-            if(sensorJSON[key].type != "wifi")
+
+			/*
+			if(sensorJSON[key].type != "wifi")
             {
 
                 var option = document.createElement("option");
@@ -73,14 +75,32 @@ function connect()
                 option.innerHTML = sensorJSON[key].type;
                 dropdownList.appendChild(option);
             }
+			*/
+	    	
         }
-    
-    // Now all sensors are added to the list, we are allowed to add them to the scene.
-    document.getElementById("button_add").disabled = false;
+    	setInterval(test,5000);
+	}
+	
+}
 
-    // Start plotting.
-    setInterval(plot, UPDATE_INTERVAL);
-    }
+function test() {
+	var sensors = JSON.parse(httpGet(DATA_URL)).sensors;
+	var ans = "yes";
+	for (var key in sensors) {
+		if (sensors[key].type == "accelerometer") {
+			for (var count = 0; count < 3000; count++) {				
+				if (sensors[key].values[0] < 0) {
+					ans = "no";
+				}
+			}
+			if (ans == "yes") {
+				alert("Well Done!!!");
+			}
+			else {
+				alert("NOOB!!!");
+			}
+		}
+	}
 }
 
 // Get the IP value from the textbox.
