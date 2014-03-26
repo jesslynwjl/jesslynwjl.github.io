@@ -4,8 +4,9 @@
 <script src="AR_mediaStream_files/magi.js"></script>
 <script src="AR_mediaStream_files/utils.js"></script>
 <script src="AR_mediaStream_files/photos.js"></script>
+<script src="AR_mediaStream_files/GridView-Flot.js"></script>
 <script>
-
+  var detected;
   threshold = 128;
   DEBUG = false;
 
@@ -77,8 +78,8 @@ getUserMedia({'video': true},
 
     var glCanvas = document.createElement('canvas');
     glCanvas.style.webkitTransform = 'scale(-1.0, 1.0)';
-    glCanvas.width = 960;
-    glCanvas.height = 720;
+    glCanvas.width = 672;
+    glCanvas.height = 504;
     var s = glCanvas.style;
     document.body.appendChild(glCanvas);
     display = new Magi.Scene(glCanvas);
@@ -127,9 +128,26 @@ getUserMedia({'video': true},
       display.changed = true;
 
       var t = new Date();
-      var detected = detector.detectMarkerLite(raster, threshold);
+      detected = detector.detectMarkerLite(raster, threshold);
 	  
-	  // Read image here: BY JASON
+	  /*//counter
+	  //set up a counter
+	  var count=3;
+	  var counter=setInterval(timer, 1000); //1000 will  run it every 1 second
+	  
+	  
+	  function timer()
+	  {
+	    count=count-1;
+	    if (count <= 0)
+	    {
+		   clearInterval(counter);
+		   return;
+	    }
+	
+	   document.getElementById("timer").innerHTML=count + " secs"; // watch for spelling
+  	  }*/
+	  /*// Read image here: BY JASON
 		if (detected != 0) {
 			
 			var counter=0;
@@ -157,16 +175,16 @@ getUserMedia({'video': true},
 
 				}
 			}
-		}
+		}*/
       for (var idx = 0; idx<detected; idx++) {
         var id = detector.getIdMarkerData(idx);
-        //read data from i_code via Marsial--MarshalÃƒÂ§Ã‚ÂµÃ…â€™ÃƒÂ§Ã¢â‚¬ÂÃ‚Â±ÃƒÂ£Ã‚ÂÃ‚Â§ÃƒÂ¨Ã‚ÂªÃ‚Â­ÃƒÂ£Ã‚ÂÃ‚Â¿ÃƒÂ¥Ã¢â‚¬Â¡Ã‚ÂºÃƒÂ£Ã‚ÂÃ¢â€žÂ¢
+        //read data from i_code via Marsial--MarshalÃ§ÂµÅ’Ã§â€Â±Ã£ÂÂ§Ã¨ÂªÂ­Ã£ÂÂ¿Ã¥â€¡ÂºÃ£Ââ„¢
         var currId;
         if (id.packetLength > 4) {
           currId = -1;
         }else{
           currId=0;
-          //ÃƒÂ¦Ã…â€œÃ¢â€šÂ¬ÃƒÂ¥Ã‚Â¤Ã‚Â§4ÃƒÂ£Ã†â€™Ã‚ÂÃƒÂ£Ã¢â‚¬Å¡Ã‚Â¤ÃƒÂ£Ã†â€™Ã‹â€ ÃƒÂ§Ã‚Â¹Ã¢â‚¬Â¹ÃƒÂ£Ã‚ÂÃ¢â‚¬â„¢ÃƒÂ£Ã‚ÂÃ‚Â¦ÃƒÂ¯Ã‚Â¼Ã¢â‚¬ËœÃƒÂ¥Ã¢â€šÂ¬Ã¢â‚¬Â¹ÃƒÂ£Ã‚ÂÃ‚Â®intÃƒÂ¥Ã¢â€šÂ¬Ã‚Â¤ÃƒÂ£Ã‚ÂÃ‚Â«ÃƒÂ¥Ã‚Â¤Ã¢â‚¬Â°ÃƒÂ¦Ã‚ÂÃ¢â‚¬Âº
+          //Ã¦Å“â‚¬Ã¥Â¤Â§4Ã£Æ’ÂÃ£â€šÂ¤Ã£Æ’Ë†Ã§Â¹â€¹Ã£Ââ€™Ã£ÂÂ¦Ã¯Â¼â€˜Ã¥â‚¬â€¹Ã£ÂÂ®intÃ¥â‚¬Â¤Ã£ÂÂ«Ã¥Â¤â€°Ã¦Ââ€º
           for (var i = 0; i < id.packetLength; i++ ) {
             currId = (currId << 8) | id.getPacketData(i);
             //console.log("id[", i, "]=", id.getPacketData(i));
@@ -277,6 +295,20 @@ getUserMedia({'video': true},
 </head>
 <body>
 <div style="display: none;" id="loading">Hang on, I'm loading stuff...</div>
+<!--<span id="timer"></span>-->
+
+<div id="settings">
+        <div id="connection">
+            Sensor IP Address : <input type="text" id="input_ip_address" value="http://172.23.45.30:8765/"/>
+            <button type="button" id="button_connect" onclick="connect()">Connect</button>
+        </div>
+        <div id="sensorlist">
+            <!--<select id="data_type"></select>-->
+            <!--<button type="button" id="button_add" onclick="addGraph()" disabled="true">Add</button>-->
+        </div>
+    </div>
+    <div id="graphview">
+    </div>
 
 <script type="text/javascript">
 
@@ -289,18 +321,8 @@ getUserMedia({'video': true},
     ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
   })();
-
-//i add in de
-		ipaddress=prompt("input your IP") 
-		var data = JSON.parse(httpGet("http://"+ipaddress));
-
-		function httpGet(theUrl) { 
-			var xmlHttp = null;
-			xmlHttp = new XMLHttpRequest();
-			xmlHttp.open( "GET", theUrl, false );
-			xmlHttp.send(null);
-			return xmlHttp.responseText;
-		}
 </script>
 
+</body>
 
+</html>
