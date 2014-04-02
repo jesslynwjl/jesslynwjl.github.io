@@ -122,7 +122,8 @@ function test() {
 				if (ans == "yes") {
 					if(countdown==0) {
 						countdown=6;
-						alert("Well Done!!!");
+						alert("WELL DONE!!!" + "\n" + "\n" + "Congrats! Your sensor values is: " + sensors[key].values[0] + "\n" + "\n"+ "It falls within the ideal threshold of 8.5-10 to be stable." + "\n" + "You can proceed on to the next step of firing the bow.");
+						
 					}
 					else {
 						countdown --;
@@ -130,7 +131,8 @@ function test() {
 				}
 				else {
 					countdown=6;
-					alert("NOOB!!!");
+					alert("TRY AGAIN!!!" + "\n"+ "\n" + "Your sensor value is: "+ sensors[key].values[0] + "\n" + "\n" + "Your values have to be within the ideal threshold of 8.5-10 to be stable.");
+					
 				}
 			}
 		}
