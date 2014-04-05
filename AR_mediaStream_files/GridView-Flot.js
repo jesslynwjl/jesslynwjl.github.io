@@ -87,6 +87,9 @@ function connect()
 }
 
 var i =0;
+
+
+
 function test() {
 	// ask user to find target
 	if(countdown==6) {
@@ -122,7 +125,7 @@ function test() {
 				if (ans == "yes") {
 					if(countdown==0) {
 						countdown=6;
-						alert("WELL DONE!!!" + "\n" + "\n" + "Congrats! Your sensor values is: " + sensors[key].values[0] + "\n" + "\n"+ "It falls within the ideal threshold of 8.5-10 to be stable." + "\n" + "You can proceed on to the next step of firing the bow.");
+						alert("WELL DONE!!!" + "\n" + "\n" + "Congrats! Your sensor values is: " + sensors[key].values[0].toFixed(2) + "\n" + "\n"+ "It falls within the ideal threshold of 8.5-10 to be stable." + "\n" + "You can proceed on to the next step of firing the bow.");
 						
 					}
 					else {
@@ -131,7 +134,7 @@ function test() {
 				}
 				else {
 					countdown=6;
-					alert("TRY AGAIN!!!" + "\n"+ "\n" + "Your sensor value is: "+ sensors[key].values[0] + "\n" + "\n" + "Your values have to be within the ideal threshold of 8.5-10 to be stable.");
+					alert("TRY AGAIN!!!" + "\n"+ "\n" + "Your sensor value is: "+ sensors[key].values[0].toFixed(2) + "\n" + "\n" + "Your values have to be within the ideal threshold of 8.5-10 to be stable.");
 					
 				}
 			}
