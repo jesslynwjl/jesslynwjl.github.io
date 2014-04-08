@@ -126,7 +126,7 @@ function test() {
 					if(countdown==0) {
 						countdown=6;
 						document.getElementById('displayOutput').style.color = "green";
-						document.getElementById('displayOutput').value = "WELL DONE!!!" + "\n" + "\n" + "Congrats! Your sensor values is: " + sensors[key].values[0].toFixed(2) + "\n" + "\n"+ "It falls within the ideal threshold of 8.5-10 to be stable." + "\n" + "You can proceed on to the next step of firing the bow.";
+						document.getElementById('displayOutput').value = "WELL DONE!!!" + "\n" + "\n" + "Congrats! Your sensor values is: " + sensors[key].values[0].toFixed(2);
 					}
 					else {
 						countdown --;
@@ -135,7 +135,7 @@ function test() {
 				else {
 					countdown=6;
 					document.getElementById('displayOutput').style.color = "red";					
-					document.getElementById('displayOutput').value = "TRY AGAIN!!!" + "\n"+ "\n" + "Your sensor value is: "+ sensors[key].values[0].toFixed(2) + "\n" + "\n" + "Your values have to be within the ideal threshold of 8.5-10 to be stable.";
+					document.getElementById('displayOutput').value = "TRY AGAIN!!!" + "\n"+ "\n" + "Your sensor value is: "+ sensors[key].values[0].toFixed(2) + "\n" + "\n" + "(IDEAL VALUE: 8.5 - 10)";
 				}
 			}
 		}
