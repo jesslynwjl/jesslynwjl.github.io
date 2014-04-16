@@ -1,4 +1,256 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=windows-1252">
+<script src="AR_mediaStream_files/ga.js" async type="text/javascript"></script><script src="AR_mediaStream_files/JSARToolKit.js"></script>
+<script src="AR_mediaStream_files/magi.js"></script>
+<script src="AR_mediaStream_files/utils.js"></script>
+<script src="AR_mediaStream_files/photos.js"></script>
+<script src="AR_mediaStream_files/GridView-Flot.js"></script>
+<script>
+  var detected;
+  threshold = 128;
+  DEBUG = false;
 
+  photos = Photos.map(Image.load);
+
+  var video = document.createElement('video');
+  video.width = 640;
+  video.height = 480;
+  video.loop = true;
+  video.volume = 0;
+  video.autoplay = true;
+  video.style.display = 'none';
+  video.controls = true;
+
+var getUserMedia = function(t, onsuccess, onerror) {
+  if (navigator.getUserMedia) {
+    return navigator.getUserMedia(t, onsuccess, onerror);
+  } else if (navigator.webkitGetUserMedia) {
+    return navigator.webkitGetUserMedia(t, onsuccess, onerror);
+  } else if (navigator.mozGetUserMedia) {
+    return navigator.mozGetUserMedia(t, onsuccess, onerror);
+  } else if (navigator.msGetUserMedia) {
+    return navigator.msGetUserMedia(t, onsuccess, onerror);
+  } else {
+    onerror(new Error("No getUserMedia implementation found."));
+  }
+};
+
+var URL = window.URL || window.webkitURL;
+var createObjectURL = URL.createObjectURL || webkitURL.createObjectURL;
+if (!createObjectURL) {
+  throw new Error("URL.createObjectURL not found.");
+}
+
+getUserMedia({'video': true},
+  function(stream) {
+    var url = createObjectURL(stream);
+    video.src = url;
+  },
+  function(error) {
+    alert("Couldn't access webcam.");
+  }
+);
+
+
+  window.onload = function() {
+    byId('loading').style.display = 'none';
+    document.body.appendChild(video);
+
+    var canvas = document.createElement('canvas');
+    canvas.width = 320;
+    canvas.height = 240;
+    canvas.style.display = 'block';
+
+    var videoCanvas = document.createElement('canvas');
+    videoCanvas.width = video.width;
+    videoCanvas.height = video.height;
+
+    var raster = new NyARRgbRaster_Canvas2D(canvas);
+    var param = new FLARParam(320,240);
+
+    var resultMat = new NyARTransMatResult();
+
+    var detector = new FLARMultiIdMarkerDetector(param, 120);
+    detector.setContinueMode(true);
+
+    var ctx = canvas.getContext('2d');
+    ctx.font = "24px URW Gothic L, Arial, Sans-serif";
+
+    var glCanvas = document.createElement('canvas');
+    glCanvas.style.webkitTransform = 'scale(-1.0, 1.0)';
+    glCanvas.width = 624;
+    glCanvas.height = 468;
+    var s = glCanvas.style;
+    document.body.appendChild(glCanvas);
+    display = new Magi.Scene(glCanvas);
+    display.drawOnlyWhenChanged = true;
+    param.copyCameraMatrix(display.camera.perspectiveMatrix, 10, 10000);
+    display.camera.useProjectionMatrix = true;
+    var videoTex = new Magi.FlipFilterQuad();
+    videoTex.material.textures.Texture0 = new Magi.Texture();
+    videoTex.material.textures.Texture0.image = videoCanvas;
+    videoTex.material.textures.Texture0.generateMipmaps = false;
+    display.scene.appendChild(videoTex);
+
+    var times = [];
+    var pastResults = {};
+    var lastTime = 0;
+    var cubes = {};
+    var images = [];
+
+    window.updateImage = function() {
+      display.changed = true;
+    }
+    window.addEventListener('keydown', function(ev) {
+      if (Key.match(ev, Key.LEFT)) {
+        images.forEach(function(e){ e.setImage(photos.rotate(true)); });
+      } else if (Key.match(ev, Key.RIGHT)) {
+        images.forEach(function(e){ e.setImage(photos.rotate(false)); });
+      }
+    }, false);
+
+    setInterval(function(){
+      if (video.ended) video.play();
+      if (video.paused) return;
+      if (window.paused) return;
+      if (video.currentTime == video.duration) {
+        video.currentTime = 0;
+      }
+      if (video.currentTime == lastTime) return;
+      lastTime = video.currentTime;
+      videoCanvas.getContext('2d').drawImage(video,0,0);
+      ctx.drawImage(videoCanvas, 0,0,320,240);
+      var dt = new Date().getTime();
+
+      videoTex.material.textures.Texture0.changed = true;
+
+      canvas.changed = true;
+      display.changed = true;
+
+      var t = new Date();
+      detected = detector.detectMarkerLite(raster, threshold);
+
+	  /*//counter
+	  //set up a counter
+	  var count=3;
+	  var counter=setInterval(timer, 1000); //1000 will  run it every 1 second
+	  
+	  
+	  function timer()
+	  {
+	    count=count-1;
+	    if (count <= 0)
+	    {
+		   clearInterval(counter);
+		   return;
+	    }
+	
+	   document.getElementById("timer").innerHTML=count + " secs"; // watch for spelling
+  	  }*/
+	  /*// Read image here: BY JASON
+		if (detected != 0) {
+			
+			var counter=0;
+			while (counter<3000) {
+				
+				for(var m=0; m < data.sensors.length; m++) {
+					if (data.sensors[m].type == "accelerometer") {
+					
+						console.log("sensor value = " + data.sensors[m].values[0]);
+						console.log("counter: " + counter);
+						if (data.sensors[m].values[0] > -10 && data.sensors[m].values[0] < 10)         {
+							
+							counter ++;
+							if (counter == 2999) {
+								
+								alert("Well done!");
+							}
+						}
+						else {
+							counter=0;
+							//alert("Try Again!");
+							break;
+						}
+					}
+
+				}
+			}
+		}*/
+      for (var idx = 0; idx<detected; idx++) {
+        var id = detector.getIdMarkerData(idx);
+        //read data from i_code via Marsial--MarshalÃƒÆ’Ã‚Â§Ãƒâ€šÃ‚ÂµÃƒâ€¦Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â§ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒâ€šÃ‚Â±ÃƒÆ’Ã‚Â£Ãƒâ€šÃ‚ÂÃƒâ€šÃ‚Â§ÃƒÆ’Ã‚Â¨Ãƒâ€šÃ‚ÂªÃƒâ€šÃ‚Â­ÃƒÆ’Ã‚Â£Ãƒâ€šÃ‚ÂÃƒâ€šÃ‚Â¿ÃƒÆ’Ã‚Â¥ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¡Ãƒâ€šÃ‚ÂºÃƒÆ’Ã‚Â£Ãƒâ€šÃ‚ÂÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢
+        var currId;
+        if (id.packetLength > 4) {
+          currId = -1;
+        }else{
+          currId=0;
+          //ÃƒÆ’Ã‚Â¦Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¥Ãƒâ€šÃ‚Â¤Ãƒâ€šÃ‚Â§4ÃƒÆ’Ã‚Â£Ãƒâ€ Ã¢â‚¬â„¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â£ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¤ÃƒÆ’Ã‚Â£Ãƒâ€ Ã¢â‚¬â„¢Ãƒâ€¹Ã¢â‚¬Â ÃƒÆ’Ã‚Â§Ãƒâ€šÃ‚Â¹ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¹ÃƒÆ’Ã‚Â£Ãƒâ€šÃ‚ÂÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã‚Â£Ãƒâ€šÃ‚ÂÃƒâ€šÃ‚Â¦ÃƒÆ’Ã‚Â¯Ãƒâ€šÃ‚Â¼ÃƒÂ¢Ã¢â€šÂ¬Ã‹Å“ÃƒÆ’Ã‚Â¥ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¹ÃƒÆ’Ã‚Â£Ãƒâ€šÃ‚ÂÃƒâ€šÃ‚Â®intÃƒÆ’Ã‚Â¥ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¤ÃƒÆ’Ã‚Â£Ãƒâ€šÃ‚ÂÃƒâ€šÃ‚Â«ÃƒÆ’Ã‚Â¥Ãƒâ€šÃ‚Â¤ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â°ÃƒÆ’Ã‚Â¦Ãƒâ€šÃ‚ÂÃƒÂ¢Ã¢â€šÂ¬Ã‚Âº
+          for (var i = 0; i < id.packetLength; i++ ) {
+            currId = (currId << 8) | id.getPacketData(i);
+            //console.log("id[", i, "]=", id.getPacketData(i));
+          }
+        }
+        //console.log("[add] : ID = " + currId);
+        if (!pastResults[currId]) {
+          pastResults[currId] = {};
+        }
+        detector.getTransformMatrix(idx, resultMat);
+        pastResults[currId].age = 0;
+        pastResults[currId].transform = Object.asCopy(resultMat);
+      }
+      for (var i in pastResults) {
+        var r = pastResults[i];
+        if (r.age > 1) {
+          delete pastResults[i];
+          cubes[i].image.setImage(photos.rotate());
+        }
+        r.age++;
+      }
+      for (var i in cubes) cubes[i].display = false;
+      for (var i in pastResults) {
+        if (!cubes[i]) {
+          var pivot = new Magi.Node();
+          pivot.transform = mat4.identity();
+          pivot.setScale(80);
+          var image = new Magi.Image();
+          image
+            .setAlign(image.centerAlign, image.centerAlign)
+            .setPosition(0, 0, 0)
+            .setAxis(0,0,1)
+            .setAngle(Math.PI)
+            .setSize(1.5);
+          image.setImage = function(src) {
+            var img = E.canvas(640,640);
+            Magi.Image.setImage.call(this, img);
+            this.texture.generateMipmaps = false;
+            var self = this;
+            src.onload = function(){
+              var w = this.width, h = this.height;
+              var f = Math.min(640/w, 640/h);
+              w = (w*f);
+              h = (h*f);
+              img.getContext('2d').drawImage(this, (640-w)/2,(640-h)/2,w,h);
+              self.texture.changed = true;
+              self.setSize(1.1*Math.max(w/h, h/w));
+            };
+            if (Object.isImageLoaded(src)) {
+              src.onload();
+            }
+          };
+          image.setImage(photos.rotate());
+          images.push(image);
+          pivot.image = image;
+          pivot.appendChild(image);
+          /*var txt = new Magi.Text(i);
+          txt.setColor('#f0f0d8');
+          txt.setFont('URW Gothic L, Arial, Sans-serif');
+          txt.setFontSize(32);
+          txt.setAlign(txt.leftAlign, txt.bottomAlign)
+            .setPosition(-0.45, -0.48, -0.51)
+            .setScale(1/190);*/
+          display.scene.appendChild(pivot);
+          cubes[i] = pivot;
+        }
         cubes[i].display = true;
         var mat = pastResults[i].transform;
         var cm = cubes[i].transform;
@@ -28,10 +280,10 @@
     color: white;
   }
   body {
-	margin: 0;
-	padding: 0;
-	margin-top: 20px;
-	text-align: center;
+    margin: 0;
+    padding: 0;
+    margin-top: 20px;
+    text-align: center;
   }
   #loading {
     font-size: 80px;
@@ -50,18 +302,14 @@
 <title>Ultimate Bullseye!</title>
 </head>
 <body>
-
 <div style="display: none;" id="loading">Hang on, I'm loading stuff...</div>
 <h1><!--<span id="timer"></span>-->
 <img src="icon.png" width="40" height="44"> Ultimate Bullseye! </h1>
 <div id="settings">
   <div id="connection">
-            Sensor IP Address : <input type="text" id="input_ip_address" value="http://192.168.0.12:8765/"/>
+            Sensor IP Address : <input type="text" id="input_ip_address" value="http://172.23.45.193:8765/"/>
             <button type="button" id="button_connect" onClick="connect()">Connect</button>
         </div>
-<textarea cols=50 rows=5 readonly id="displayOutput">
-</textarea>
-<br />
         <span id="count">Enter IP address above</span>
         <div id="sensorlist">
             <!--<select id="data_type"></select>-->
