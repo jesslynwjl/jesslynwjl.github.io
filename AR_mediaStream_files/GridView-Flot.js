@@ -78,18 +78,15 @@ function connect()
                 dropdownList.appendChild(option);
             }
 			*/
-
+	    	
         }
-
+		
     	setInterval(test,1000);
 	}
-
+	
 }
 
 var i =0;
-
-
-
 function test() {
 	// ask user to find target
 	if(countdown==6) {
@@ -99,16 +96,16 @@ function test() {
 	else if(countdown >3) {
 		document.getElementById("count").innerHTML = "Pull the string and hold for 3 seconds";
 	}
-
+	
 	console.log("countdown: " + countdown);
 	var marker = detected;
 
 	var sensors = JSON.parse(httpGet(DATA_URL)).sensors;
 	var ans = "yes";
-
+	
 	// if target found, give user 2 seconds to pull bow
 	if (marker != 0) {
-
+		
 		if(countdown <=3) {
 			document.getElementById("count").innerHTML = countdown + "s"
 		}
@@ -121,12 +118,11 @@ function test() {
 					countdown=6;
 					ans = "no";
 				}
-
+				
 				if (ans == "yes") {
 					if(countdown==0) {
 						countdown=6;
-						alert("WELL DONE!!!" + "\n" + "\n" + "Congrats! Your sensor values is: " + sensors[key].values[0].toFixed(2) + "\n" + "\n"+ "It falls within the ideal threshold of 8.5-10 to be stable." + "\n" + "You can proceed on to the next step of firing the bow.");
-
+						alert("Well Done!!!");
 					}
 					else {
 						countdown --;
@@ -134,8 +130,7 @@ function test() {
 				}
 				else {
 					countdown=6;
-					alert("TRY AGAIN!!!" + "\n"+ "\n" + "Your sensor value is: "+ sensors[key].values[0].toFixed(2) + "\n" + "\n" + "Your values have to be within the ideal threshold of 8.5-10 to be stable.");
-
+					alert("NOOB!!!");
 				}
 			}
 		}
