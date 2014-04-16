@@ -78,12 +78,12 @@ function connect()
                 dropdownList.appendChild(option);
             }
 			*/
-	    	
+
         }
-		
+
     	setInterval(test,1000);
 	}
-	
+
 }
 
 var i =0;
@@ -99,16 +99,16 @@ function test() {
 	else if(countdown >3) {
 		document.getElementById("count").innerHTML = "Pull the string and hold for 3 seconds";
 	}
-	
+
 	console.log("countdown: " + countdown);
 	var marker = detected;
 
 	var sensors = JSON.parse(httpGet(DATA_URL)).sensors;
 	var ans = "yes";
-	
+
 	// if target found, give user 2 seconds to pull bow
 	if (marker != 0) {
-		
+
 		if(countdown <=3) {
 			document.getElementById("count").innerHTML = countdown + "s"
 		}
@@ -121,12 +121,12 @@ function test() {
 					countdown=6;
 					ans = "no";
 				}
-				
+
 				if (ans == "yes") {
 					if(countdown==0) {
 						countdown=6;
-						document.getElementById('displayOutput').style.color = "green";
-						document.getElementById('displayOutput').value = "WELL DONE!!!" + "\n" + "\n" + "Congrats! Your sensor values is: " + sensors[key].values[0].toFixed(2);
+						alert("WELL DONE!!!" + "\n" + "\n" + "Congrats! Your sensor values is: " + sensors[key].values[0].toFixed(2) + "\n" + "\n"+ "It falls within the ideal threshold of 8.5-10 to be stable." + "\n" + "You can proceed on to the next step of firing the bow.");
+
 					}
 					else {
 						countdown --;
@@ -134,16 +134,14 @@ function test() {
 				}
 				else {
 					countdown=6;
-					document.getElementById('displayOutput').style.color = "red";					
-					document.getElementById('displayOutput').value = "TRY AGAIN!!!" + "\n"+ "\n" + "Your sensor value is: "+ sensors[key].values[0].toFixed(2) + "\n" + "\n" + "(IDEAL VALUE: 8.5 - 10)";
+					alert("TRY AGAIN!!!" + "\n"+ "\n" + "Your sensor value is: "+ sensors[key].values[0].toFixed(2) + "\n" + "\n" + "Your values have to be within the ideal threshold of 8.5-10 to be stable.");
+
 				}
 			}
 		}
 	}
 	else {
 		countdown=6;
-		document.getElementById('displayOutput').style.color = "white";
-		document.getElementById('displayOutput').value = "";
 	}
 }
 
