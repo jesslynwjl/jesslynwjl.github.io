@@ -1,12 +1,10 @@
 <html><head>
-
 <meta http-equiv="content-type" content="text/html; charset=windows-1252">
 <script src="AR_mediaStream_files/ga.js" async type="text/javascript"></script><script src="AR_mediaStream_files/JSARToolKit.js"></script>
 <script src="AR_mediaStream_files/magi.js"></script>
 <script src="AR_mediaStream_files/utils.js"></script>
 <script src="AR_mediaStream_files/photos.js"></script>
 <script src="AR_mediaStream_files/GridView-Flot.js"></script>
-
 <script>
   var detected;
   threshold = 128;
@@ -80,8 +78,8 @@ getUserMedia({'video': true},
 
     var glCanvas = document.createElement('canvas');
     glCanvas.style.webkitTransform = 'scale(-1.0, 1.0)';
-    glCanvas.width = 400;
-    glCanvas.height = 230;
+    glCanvas.width = 624;
+    glCanvas.height = 468;
     var s = glCanvas.style;
     document.body.appendChild(glCanvas);
     display = new Magi.Scene(glCanvas);
@@ -131,7 +129,7 @@ getUserMedia({'video': true},
 
       var t = new Date();
       detected = detector.detectMarkerLite(raster, threshold);
-	  
+
 	  /*//counter
 	  //set up a counter
 	  var count=3;
@@ -186,7 +184,7 @@ getUserMedia({'video': true},
           currId = -1;
         }else{
           currId=0;
-          //ÃƒÆ’Ã‚Â¦Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¥Ãƒâ€šÃ‚Â¤Ãƒâ€šÃ‚Â§4ÃƒÆ’Ã‚Â£Ãƒâ€ Ã¢â‚¬â„¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â£ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¤ÃƒÆ’Ã‚Â£Ãƒâ€ Ã¢â‚¬â„¢Ãƒâ€¹Ã¢â‚¬Â ÃƒÆ’Ã‚Â§Ãƒâ€šÃ‚Â¹ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¹ÃƒÆ’Ã‚Â£Ãƒâ€šÃ‚ÂÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã‚Â£Ãƒâ€šÃ‚ÂÃƒâ€šÃ‚Â¦ÃƒÆ’Ã‚Â¯Ãƒâ€šÃ‚Â¼ÃƒÂ¢Ã¢â€šÂ¬Ã‹Å“ÃƒÆ’Ã‚Â¥ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¹ÃƒÆ’Ã‚Â£Ãƒâ€šÃ‚ÂÃƒâ€šÃ‚Â®intÃƒÆ’Ã‚Â¥ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¤ÃƒÆ’Ã‚Â£Ãƒâ€šÃ‚ÂÃƒâ€šÃ‚Â«ÃƒÆ’Ã‚Â¥Ãƒâ€šÃ‚Â¤ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â°ÃƒÆ’Ã‚Â¦Ãƒâ€šÃ‚ÂÃƒÂ¢Ã¢â€šÂ¬Ã‚Âº
+          //ÃƒÆ’Ã‚Â¦Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¥Ãƒâ€šÃ‚Â¤Ãƒâ€šÃ‚Â§4ÃƒÆ’Ã‚Â£Ãƒâ€ Ã¢â‚¬â„¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â£ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¤ÃƒÆ’Ã‚Â£Ãƒâ€ Ã¢â‚¬â„¢Ãƒâ€¹Ã¢â‚¬Â ÃƒÆ’Ã‚Â§Ãƒâ€šÃ‚Â¹ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¹ÃƒÆ’Ã‚Â£Ãƒâ€šÃ‚ÂÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã‚Â£Ãƒâ€šÃ‚ÂÃƒâ€šÃ‚Â¦ÃƒÆ’Ã‚Â¯Ãƒâ€šÃ‚Â¼ÃƒÂ¢Ã¢â€šÂ¬Ã‹Å“ÃƒÆ’Ã‚Â¥ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¹ÃƒÆ’Ã‚Â£Ãƒâ€šÃ‚ÂÃƒâ€šÃ‚Â®intÃƒÆ’Ã‚Â¥ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¤ÃƒÆ’Ã‚Â£Ãƒâ€šÃ‚ÂÃƒâ€šÃ‚Â«ÃƒÆ’Ã‚Â¥Ãƒâ€šÃ‚Â¤ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â°ÃƒÆ’Ã‚Â¦Ãƒâ€šÃ‚ÂÃƒÂ¢Ã¢â€šÂ¬Ã‚Âº
           for (var i = 0; i < id.packetLength; i++ ) {
             currId = (currId << 8) | id.getPacketData(i);
             //console.log("id[", i, "]=", id.getPacketData(i));
@@ -282,10 +280,10 @@ getUserMedia({'video': true},
     color: white;
   }
   body {
-	margin: 0;
-	padding: 0;
-	margin-top: 20px;
-	text-align: center;
+    margin: 0;
+    padding: 0;
+    margin-top: 20px;
+    text-align: center;
   }
   #loading {
     font-size: 80px;
@@ -304,18 +302,14 @@ getUserMedia({'video': true},
 <title>Ultimate Bullseye!</title>
 </head>
 <body>
-
 <div style="display: none;" id="loading">Hang on, I'm loading stuff...</div>
 <h1><!--<span id="timer"></span>-->
 <img src="icon.png" width="40" height="44"> Ultimate Bullseye! </h1>
 <div id="settings">
   <div id="connection">
-            Sensor IP Address : <input type="text" id="input_ip_address" value="http://192.168.0.12:8765/"/>
+            Sensor IP Address : <input type="text" id="input_ip_address" value="http://172.23.45.193:8765/"/>
             <button type="button" id="button_connect" onClick="connect()">Connect</button>
         </div>
-<textarea cols=50 rows=5 readonly id="displayOutput">
-</textarea>
-<br />
         <span id="count">Enter IP address above</span>
         <div id="sensorlist">
             <!--<select id="data_type"></select>-->
