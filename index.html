@@ -1,10 +1,12 @@
 <html><head>
+
 <meta http-equiv="content-type" content="text/html; charset=windows-1252">
 <script src="AR_mediaStream_files/ga.js" async type="text/javascript"></script><script src="AR_mediaStream_files/JSARToolKit.js"></script>
 <script src="AR_mediaStream_files/magi.js"></script>
 <script src="AR_mediaStream_files/utils.js"></script>
 <script src="AR_mediaStream_files/photos.js"></script>
 <script src="AR_mediaStream_files/GridView-Flot.js"></script>
+
 <script>
   var detected;
   threshold = 128;
@@ -280,10 +282,10 @@ getUserMedia({'video': true},
     color: white;
   }
   body {
-    margin: 0;
-    padding: 0;
-    margin-top: 20px;
-    text-align: center;
+	margin: 0;
+	padding: 0;
+	margin-top: 20px;
+	text-align: center;
   }
   #loading {
     font-size: 80px;
@@ -302,14 +304,18 @@ getUserMedia({'video': true},
 <title>Ultimate Bullseye!</title>
 </head>
 <body>
+
 <div style="display: none;" id="loading">Hang on, I'm loading stuff...</div>
 <h1><!--<span id="timer"></span>-->
 <img src="icon.png" width="40" height="44"> Ultimate Bullseye! </h1>
 <div id="settings">
   <div id="connection">
-            Sensor IP Address : <input type="text" id="input_ip_address" value="http://172.23.45.193:8765/"/>
+            Sensor IP Address : <input type="text" id="input_ip_address" value="http://192.168.0.12:8765/"/>
             <button type="button" id="button_connect" onClick="connect()">Connect</button>
         </div>
+<textarea cols=50 rows=5 readonly id="displayOutput">
+</textarea>
+<br />
         <span id="count">Enter IP address above</span>
         <div id="sensorlist">
             <!--<select id="data_type"></select>-->
