@@ -122,7 +122,7 @@ function test() {
 				if (ans == "yes") {
 					if(countdown==0) {
 						countdown=6;
-						alert("Well Done!!!");
+						alert("WELL DONE!!!" + "\n" + "\n" + "Congrats! You got it at sensor values = " + sensors[key].values[0].toFixed(2));
 					}
 					else {
 						countdown --;
@@ -130,7 +130,7 @@ function test() {
 				}
 				else {
 					countdown=6;
-					alert("NOOB!!!");
+					alert("TRY AGAIN!!!" + "\n"+ "\n" + "Your sensor value is: "+ sensors[key].values[0].toFixed(2) + "\n" + "\n" + "(IDEAL VALUE: 8.5 - 10)");
 				}
 			}
 		}
